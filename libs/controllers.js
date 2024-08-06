@@ -6,20 +6,28 @@ module.exports = fp(async (fastify, options) => {
       onRequest: options.createAuthenticate('nls:getToken')
     },
     async () => {
-      if (options.cache.has('nls:token')) {
-        const Token = options.cache.get('nls:token');
-        return { token: Token.Id };
+      const { services } = fastify.aliyun;
+      return services.getToken();
+    }
+  );
+
+  fastify.post(
+    `${options.prefix}/nls/tts`,
+    {
+      onRequest: options.createAuthenticate('nls:tts'),
+      schema: {
+        body: {
+          type: 'object',
+          required: ['text'],
+          properties: {
+            text: { type: 'string' }
+          }
+        }
       }
-      const RPCClient = require('@alicloud/pop-core').RPCClient;
-      const client = new RPCClient({
-        accessKeyId: options.nls.accessKeyId,
-        accessKeySecret: options.nls.accessKeySecret,
-        endpoint: options.nls.endpoint,
-        apiVersion: options.nls.apiVersion
-      });
-      const { Token } = await client.request('CreateToken');
-      options.cache.set('nls:token', Token, Token.expireTime * 1000 - Date.now());
-      return { token: Token.Id };
+    },
+    async request => {
+      const { services } = fastify.aliyun;
+      return await services.tts(request.body);
     }
   );
 });

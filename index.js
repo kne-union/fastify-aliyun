@@ -9,8 +9,13 @@ module.exports = fp(async (fastify, options) => {
   options = merge(
     {
       nls: {
-        endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
-        apiVersion: '2019-02-28'
+        token: {
+          endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
+          apiVersion: '2019-02-28'
+        },
+        tts: {
+          endpoint: 'http://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts'
+        }
       },
       prefix: `/api/v${packageJson.version.split('.')[0]}/aliyun`,
       createAuthenticate: () => {
@@ -23,6 +28,9 @@ module.exports = fp(async (fastify, options) => {
   fastify.register(require('@kne/fastify-namespace'), {
     name: 'aliyun',
     options,
-    modules: [['controllers', path.resolve(__dirname, './libs/controllers.js')]]
+    modules: [
+      ['controllers', path.resolve(__dirname, './libs/controllers.js')],
+      ['services', path.resolve(__dirname, './libs/services.js')]
+    ]
   });
 });
