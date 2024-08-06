@@ -4,33 +4,39 @@ const path = require('path');
 const packageJson = require('./package.json');
 const NodeCache = require('node-cache');
 
-module.exports = fp(async (fastify, options) => {
-  const cache = new NodeCache();
-  options = merge(
-    {
-      nls: {
-        token: {
-          endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
-          apiVersion: '2019-02-28'
+module.exports = fp(
+  async (fastify, options) => {
+    const cache = new NodeCache();
+    options = merge(
+      {
+        nls: {
+          token: {
+            endpoint: 'http://nls-meta.cn-shanghai.aliyuncs.com',
+            apiVersion: '2019-02-28'
+          },
+          tts: {
+            endpoint: 'http://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts'
+          }
         },
-        tts: {
-          endpoint: 'http://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts'
+        prefix: `/api/v${packageJson.version.split('.')[0]}/aliyun`,
+        createAuthenticate: () => {
+          return [];
         }
       },
-      prefix: `/api/v${packageJson.version.split('.')[0]}/aliyun`,
-      createAuthenticate: () => {
-        return [];
-      }
-    },
-    options,
-    { cache }
-  );
-  fastify.register(require('@kne/fastify-namespace'), {
-    name: 'aliyun',
-    options,
-    modules: [
-      ['controllers', path.resolve(__dirname, './libs/controllers.js')],
-      ['services', path.resolve(__dirname, './libs/services.js')]
-    ]
-  });
-});
+      options,
+      { cache }
+    );
+    fastify.register(require('@kne/fastify-namespace'), {
+      name: 'aliyun',
+      options,
+      modules: [
+        ['controllers', path.resolve(__dirname, './libs/controllers.js')],
+        ['services', path.resolve(__dirname, './libs/services.js')]
+      ]
+    });
+  },
+  {
+    name: 'fastify-aliyun',
+    dependencies: ['fastify-file-manager']
+  }
+);
