@@ -19,7 +19,7 @@ module.exports = fp(async (fastify, options) => {
     return { token: Token.Id };
   };
 
-  const tts = async ({ text }) => {
+  const tts = async ({ text, audioName }) => {
     const { token } = await getToken();
     const response = await fetch(options.nls.tts.endpoint, {
       method: 'POST',
@@ -34,14 +34,6 @@ module.exports = fp(async (fastify, options) => {
       })
     });
 
-    console.log(
-      JSON.stringify({
-        appkey: options.nls.appkey,
-        text: text,
-        token: token,
-        format: 'wav'
-      })
-    );
     const buffer = await response.buffer();
     const type = await fileType.fromBuffer(buffer);
     if (!type) {
@@ -56,7 +48,7 @@ module.exports = fp(async (fastify, options) => {
       throw new Error(errorMsg);
     }
     return await fastify.fileManager.services.fileRecord.uploadToFileSystem({
-      file: { toBuffer: () => buffer, filename: `response.${type.ext}`, mimetype: type.mime }
+      file: { toBuffer: () => buffer, filename: `${audioName || 'audio'}.${type.ext}`, mimetype: type.mime }
     });
   };
   fastify.aliyun.services = { getToken, tts };

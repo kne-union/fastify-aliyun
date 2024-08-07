@@ -20,7 +20,8 @@ module.exports = fp(async (fastify, options) => {
           type: 'object',
           required: ['text'],
           properties: {
-            text: { type: 'string' }
+            text: { type: 'string' },
+            audioName: { type: 'string' }
           }
         }
       }
