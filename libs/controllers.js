@@ -7,7 +7,7 @@ module.exports = fp(async (fastify, options) => {
     },
     async () => {
       const { services } = fastify.aliyun;
-      return services.getToken();
+      return services.nls.getToken();
     }
   );
 
@@ -28,7 +28,7 @@ module.exports = fp(async (fastify, options) => {
     },
     async request => {
       const { services } = fastify.aliyun;
-      return await services.tts(request.body);
+      return await services.nls.tts(request.body);
     }
   );
 });

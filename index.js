@@ -31,7 +31,7 @@ module.exports = fp(
       options,
       modules: [
         ['controllers', path.resolve(__dirname, './libs/controllers.js')],
-        ['services', path.resolve(__dirname, './libs/services.js')]
+        ['services', path.resolve(__dirname, './libs/services')]
       ]
     });
   },
