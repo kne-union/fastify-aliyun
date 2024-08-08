@@ -2,7 +2,7 @@ const OSS = require('ali-oss');
 const fp = require('fastify-plugin');
 
 module.exports = fp(async (fastify, options) => {
-  const { servers } = fastify.aliyun;
+  const { services } = fastify.aliyun;
   const client = new OSS({
     region: options.oss.region,
     accessKeyId: options.oss.accessKeyId,
@@ -27,10 +27,11 @@ module.exports = fp(async (fastify, options) => {
     return client.signatureUrl(`${options.oss.baseDir}/${filename}`, { expires: expires || 3600 });
   };
 
-  servers.oss = {
+  services.oss = {
     client,
     uploadFile,
     uploadFileStream,
-    getFileLink
+    getFileLink,
+    downloadFile
   };
 });

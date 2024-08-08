@@ -3,7 +3,7 @@ const { RPCClient } = require('@alicloud/pop-core');
 const fetch = require('node-fetch');
 const fileType = require('file-type');
 module.exports = fp(async (fastify, options) => {
-  const { servers } = fastify.aliyun;
+  const { services } = fastify.aliyun;
   const getToken = async () => {
     if (options.cache.has('nls:token')) {
       const Token = options.cache.get('nls:token');
@@ -51,7 +51,7 @@ module.exports = fp(async (fastify, options) => {
       file: { toBuffer: () => buffer, filename: `${audioName || 'audio'}.${type.ext}`, mimetype: type.mime }
     });
   };
-  servers.nls = {
+  services.nls = {
     getToken,
     tts
   };
