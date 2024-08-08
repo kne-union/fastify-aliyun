@@ -1,6 +1,6 @@
 {
   "name": "@kne/fastify-aliyun",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "对接阿里云服务",
   "main": "index.js",
   "scripts": {
@@ -40,6 +40,7 @@
   "dependencies": {
     "@alicloud/pop-core": "^1.7.13",
     "@kne/fastify-namespace": "^0.1.2",
+    "ali-oss": "^6.20.0",
     "file-type": "^16.5.4",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2",
