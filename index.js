@@ -18,6 +18,9 @@ module.exports = fp(
             endpoint: 'http://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/tts'
           }
         },
+        oss: {
+          baseDir: 'default'
+        },
         prefix: `/api/v${packageJson.version.split('.')[0]}/aliyun`,
         createAuthenticate: () => {
           return [];
