@@ -7,7 +7,7 @@ module.exports = fp(async (fastify, options) => {
   const getToken = async () => {
     if (options.cache.has('nls:token')) {
       const Token = options.cache.get('nls:token');
-      return { token: Token.Id };
+      return { token: Token.Id, appKey: options.nls.appKey };
     }
     const client = new RPCClient({
       accessKeyId: options.nls.token.accessKeyId,

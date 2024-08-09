@@ -7,7 +7,8 @@ module.exports = fp(async (fastify, options) => {
     region: options.oss.region,
     accessKeyId: options.oss.accessKeyId,
     accessKeySecret: options.oss.accessKeySecret,
-    bucket: options.oss.bucket
+    bucket: options.oss.bucket,
+    secure: true
   });
 
   const uploadFile = async ({ file, filename }) => {
