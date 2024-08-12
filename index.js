@@ -2,11 +2,11 @@ const fp = require('fastify-plugin');
 const merge = require('lodash/merge');
 const path = require('path');
 const packageJson = require('./package.json');
-const NodeCache = require('node-cache');
+const { LRUCache } = require('lru-cache');
 
 module.exports = fp(
   async (fastify, options) => {
-    const cache = new NodeCache();
+    const cache = new LRUCache({ max: 1000 });
     options = merge(
       {
         nls: {

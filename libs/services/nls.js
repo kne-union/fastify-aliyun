@@ -2,6 +2,7 @@ const fp = require('fastify-plugin');
 const { RPCClient } = require('@alicloud/pop-core');
 const fetch = require('node-fetch');
 const fileType = require('file-type');
+const { parse } = require('ali-oss/shims/url');
 module.exports = fp(async (fastify, options) => {
   const { services } = fastify.aliyun;
   const getToken = async () => {
@@ -16,8 +17,8 @@ module.exports = fp(async (fastify, options) => {
       apiVersion: options.nls.token.apiVersion
     });
     const { Token } = await client.request('CreateToken');
-    options.cache.set('nls:token', Token, Token.expireTime * 1000 - Date.now());
-    return { token: Token.Id };
+    options.cache.set('nls:token', Token, { ttl: parseInt(Token.ExpireTime * 1000 - Date.now()) - 1 });
+    return { token: Token.Id, appKey: options.nls.appKey };
   };
   const tts = async ({ text, audioName }) => {
     const { token } = await getToken();
