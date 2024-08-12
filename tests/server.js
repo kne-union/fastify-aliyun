@@ -7,8 +7,10 @@ const path = require("path");
 
 fastify.register(fastifyEnv, {
     dotenv: true, schema: {
-        type: 'object', required: ['ACCESS_KEY_ID', 'ACCESS_KEY_SECRET',], properties: {
-            ACCESS_KEY_ID: {type: 'string'}, ACCESS_KEY_SECRET: {type: 'string'}, APP_KEY: {type: 'string'},
+        type: 'object', required: ['NLS_APP_KEY', 'NLS_ACCESS_KEY_ID','NLS_ACCESS_KEY_SECRET'], properties: {
+            NLS_APP_KEY: { type: 'string' },
+            NLS_ACCESS_KEY_ID: { type: 'string' },
+            NLS_ACCESS_KEY_SECRET: { type: 'string' },
         }
     }
 });
@@ -22,9 +24,12 @@ fastify.register(require('fastify-plugin')(async (fastify) => {
     await fastify.sequelize.sync();
     fastify.register(require('../index'), {
         nls: {
-            appKey: fastify.config.APP_KEY,
-            token: {accessKeyId: fastify.config.ACCESS_KEY_ID, accessKeySecret: fastify.config.ACCESS_KEY_SECRET}
-        }
+            appKey: fastify.config.NLS_APP_KEY,
+            token: {
+                accessKeyId: fastify.config.NLS_ACCESS_KEY_ID,
+                accessKeySecret: fastify.config.NLS_ACCESS_KEY_SECRET
+            }
+        },
     });
 }));
 
