@@ -29,16 +29,17 @@ module.exports = fp(async (fastify, options) => {
     return result.content;
   };
 
+  const getFileStream = async ({ filename }) => {
+    const client = createClient();
+    return client.getStream(`${options.oss.baseDir}/${filename}`);
+  };
+
   const getFileLink = ({ filename, expires }) => {
     const client = createClient();
     return client.signatureUrl(`${options.oss.baseDir}/${filename}`, { expires: expires || 3600 });
   };
 
   services.oss = {
-    createClient,
-    uploadFile,
-    uploadFileStream,
-    getFileLink,
-    downloadFile
+    createClient, uploadFile, uploadFileStream, getFileLink, downloadFile, getFileStream
   };
 });
