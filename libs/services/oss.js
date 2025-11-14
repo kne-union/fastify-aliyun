@@ -29,9 +29,10 @@ module.exports = fp(async (fastify, options) => {
     return result.content;
   };
 
-  const getFileStream = ({ filename }) => {
+  const getFileStream = async ({ filename }) => {
     const client = createClient();
-    return client.getStream(`${options.oss.baseDir}/${filename}`).stream;
+    const result = await client.getStream(`${options.oss.baseDir}/${filename}`);
+    return result.stream;
   };
 
   const getFileLink = ({ filename, expires }) => {
